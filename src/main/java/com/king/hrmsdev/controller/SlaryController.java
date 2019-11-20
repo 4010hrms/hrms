@@ -1,6 +1,8 @@
 package com.king.hrmsdev.controller;
 
+import com.alibaba.fastjson.JSONObject;
 import com.king.hrmsdev.entity.Employees;
+import com.king.hrmsdev.entity.Salary;
 import com.king.hrmsdev.pojo.SalaryList;
 import com.king.hrmsdev.service.SlaryMapperService;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -9,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import java.math.BigDecimal;
 import java.sql.Date;
 import java.util.List;
 
@@ -25,13 +28,24 @@ public class SlaryController {
         public  void DeleteSalary(@RequestParam(value = "job_id") Integer job_id){
             slaryMapperService.deleteSalary(job_id);
         }
-        @RequestMapping(value = "/FindallSalary", method = RequestMethod.POST)
+        @RequestMapping(value = "/FindallSalary", method = RequestMethod.POST,produces = "application/json;charset=UTF-8")
         //查询所有数据
-        public List<SalaryList> FindallSalary(){
+        public JSONObject FindallSalary(){
             List<SalaryList> lists=slaryMapperService.QuaryAllSalary();
-            return  lists;
+            JSONObject jsonObject=new JSONObject();
+            jsonObject.put("lists",lists);
+            System.out.println(jsonObject.toString());
+            System.out.println("sssssssssssssssssssssssssssssssssss");
+            return  jsonObject;
     }
 
+        @RequestMapping(value = "/updateSalary", method = RequestMethod.POST)
+        public void  updateSalary(@RequestParam("job_id") Integer job_id,
+                                  @RequestParam("finalMoney") BigDecimal bigDecimal){
+            Salary salary=new Salary(job_id,bigDecimal);
+            slaryMapperService.updateSalary(salary);
+
+        }
         @RequestMapping(value = "/AddSalary", method = RequestMethod.POST)
          //向数据库添加薪水纪录
         public void AddSalary(@RequestParam("job_id") Integer job_id,

@@ -24,4 +24,5 @@ public interface SlaryMapper {
     List<SalaryList> QuarySalary(Employees employees);//查询薪水纪录
     List<SalaryList>  QuaryAllSalary();
     void deleteSalary(int job_id);//删除数据
+    void  updateSalary(Salary salary);//更改数据
 }
