@@ -62,6 +62,9 @@
     <delete id="deleteSalary" parameterType="int">
             delete from  salary where job_id=#{job_id}
     </delete>
+    <update id="updateSalary" parameterType="com.king.hrmsdev.entity.Salary" >
+        update  salary set finasalary=#{finasalary} where job_id=#{job_id}
+    </update>
     <resultMap id="resultMap" type="com.king.hrmsdev.pojo.SalaryList" >
         <id column="id" property="id"  />
         <result column="job_id" property="job_id" />

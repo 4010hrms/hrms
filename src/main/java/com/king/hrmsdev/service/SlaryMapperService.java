@@ -35,7 +35,14 @@ public class SlaryMapperService {
     }
     public   List<SalaryList>  QuaryAllSalary(){
         List<SalaryList> lists=slaryMapper.QuaryAllSalary();
+        for (SalaryList salaryList:lists){
+            Integer integer=salaryList.getJob_id();
+            salaryList.setCheckMoney(BigDecimal.valueOf(check_moeny(integer)));
+        }
         return  lists;
+    }
+    public  void updateSalary(Salary salary){
+        slaryMapper.updateSalary(salary);
     }
     public List<SalaryList> QuarySalary(Employees employees){
         List<SalaryList> salaryLists =slaryMapper.QuarySalary(employees);
@@ -101,23 +108,27 @@ public class SlaryMapperService {
         Employees baseMessage=slaryMapper.QuaryALL(job_id);
         return  baseMessage;
     }
-    //计算员工当前工资
-    public BigDecimal getSlary(int job_id){
+    //计算员工考勤奖金
+    public int check_moeny(int  job_id){
         int overtime;//统计当月加班时间
         int late;//统计迟到次数
         int leaveearly;//统计早退次数
         int leave;//统计请假次数
         int absenteeism;//统计旷工次数
-        BigDecimal baseMoney;//职位基础工资
-        BigDecimal totalMoney;//总工资
-        baseMoney= slaryMapper.QuaryPositionByJobID(job_id).getSalary();
         overtime =slaryMapper.QuaryRewordByID(job_id).getOvertime();
         late=slaryMapper.QuaryRewordByID(job_id).getLate();
         leave=slaryMapper.QuaryRewordByID(job_id).getLeave();
         leaveearly=slaryMapper.QuaryRewordByID(job_id).getLeaveearly();
         absenteeism=slaryMapper.QuaryRewordByID(job_id).getAbsenteeism();
         int money=overtime*22-late*10-leaveearly*20-leave*50-absenteeism*100;
-        totalMoney=baseMoney.add(BigDecimal.valueOf(money));
+        return  money;
+    }
+    //计算员工当前工资
+    public BigDecimal getSlary(int job_id){
+        BigDecimal baseMoney;//职位基础工资
+        BigDecimal totalMoney;//总工资
+        baseMoney= slaryMapper.QuaryPositionByJobID(job_id).getSalary();
+        totalMoney=baseMoney.add(BigDecimal.valueOf(check_moeny(job_id)));
         return  totalMoney;
     }
     //提交员工薪水纪录

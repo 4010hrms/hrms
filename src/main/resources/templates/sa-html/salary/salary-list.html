@@ -51,15 +51,6 @@
 			</div>
 			<br />
 
-			<div class="c-item">
-				<label class="c-label">排序：</label>
-				<el-radio-group v-model="p.sort_type">
-					<el-radio :label="1">薪资最高</el-radio>
-					<el-radio :label="2">职位最高</el-radio>
-					<el-radio :label="3">奖金最高</el-radio>
-				</el-radio-group>
-			</div>
-
 		</el-form>
 
 	</div>
@@ -84,6 +75,10 @@
 
 			<el-table-column label="职位" prop="position"></el-table-column>
 
+			<el-table-column label="基础工资" prop="baseMoney"></el-table-column>
+			<el-table-column label="考勤奖金" prop="checkMoney"></el-table-column>
+			<el-table-column label="最终薪资" prop="finalMoney"></el-table-column>
+
 			<el-table-column prop="address" label="操作" width="">
 				<template slot-scope="scope">
 					<el-button type="primary" class="c-button" icon="el-icon-edit" @click="handleEdit(scope.row)">修改</el-button>
@@ -99,7 +94,7 @@
 				<el-form-item label="工号">
 					<el-input  id="job_id" name="job_id" v-model="temp.job_id" maxlength="6" placeholder="输入工号" show-word-limit onkeyup="this.value=this.value.replace(/\D/g,'')"/>
 				</el-form-item>
-				<el-form-item label="月份">
+				<el-form-item label="日期">
 					<el-date-picker id="time" name="time"  v-model="temp.time"  value-format="yyyy-MM-dd" type="date"  placeholder="选择月份"></el-date-picker>
 				</el-form-item>
 			</el-form>
@@ -109,18 +104,22 @@
           </span>
 		</el-dialog>
 
-		<!-- 分页 -->
-		<div class="page-box">
-			<el-pagination background
-						   layout="total, prev, pager, next, sizes, jumper"
-						   :current-page.sync="page.pageNo"
-						   :page-size.sync="page.pageSize"
-						   :total="page.count"
-						   :page-sizes="[1, 10, 20, 30, 40, 50, 100]"
-						   @current-change="f5(true)"
-						   @size-change="f5(true)">
-			</el-pagination>
-		</div>
+		<!-- 编辑 -->
+		<el-dialog title="编辑工资" :visible.sync="editVisible" width="30%">
+			<el-form name="form" id="form"  ref="form"  :model="form" label-width="100px">
+				<el-form-item label="员工编号">
+					{{form.job_id}}
+				</el-form-item>
+				<el-form-item label="最终奖金">
+					<el-input id="finalMoney" name="finalMoney" v-model="form.finalMoney" maxlength="30" show-word-limit/>
+				</el-form-item>
+
+			</el-form>
+			<span slot="footer" class="dialog-footer">
+            <el-button @click="editVisible = false">取 消</el-button>
+            <el-button type="primary" @click="saveEdit()">确 定</el-button>
+          </span>
+		</el-dialog>
 
 	</div>
 
@@ -148,22 +147,23 @@
 				time:"",
 
 			},
-			page: {	// 分页信息
-				pageNo: 1,
-				pageSize: 10,
-				count: 30
-			},
 			SalaryList:[
-				{job_id:1,ename: "测试名称",department:"测试",sex:"0",position:"测试",baseMoney:"999999",checkMoney:"999999",finalMoney:"0",}
+				{job_id:1,ename: "小王",department:"工程部",sex:"0",position:"白领",baseMoney:"10000",checkMoney:"500",finalMoney:"10500",}
 			],
 			addVisible:false,
+			editVisible:false,
+			form: {
+				finalMoney: "",
+			},
 			temp:{
 				department:"",
 				time:"",
 			}
 		},
 
-
+		created: function () {
+			this.getData();
+		},
 
 		methods: {
 			handleEdit:function(row){
@@ -179,6 +179,37 @@
 				}
 				this.editVisible = true
 			},
+
+			// 保存编辑，更新薪资信息
+			saveEdit:function() {
+				var that = this
+				if (form.finalMoney.value=="")
+				{
+					layer.tips('请输入最终奖金',$("#finalMoney"));
+					form.finalMoney.focus();
+					return false;
+				}else {
+					$.ajax({
+						url: "http://localhost:9900/updateSalary",
+						type: "post",
+						data: {
+							job_id: that.form.job_id,
+							finalMoney: that.form.finalMoney
+						},
+						success: function () {
+							layer.alert('修改成功', {
+								skin: 'layui-layer-molv'
+								, closeBtn: 0
+								, anim: 4
+							});
+
+							that.getData()
+						}
+					})
+					that.editVisible = false
+				}
+			},
+
 			SalaryAdd:function(row){
 				this.addVisible=true;
 			},
@@ -188,7 +219,7 @@
 				axios.post('http://localhost:9900/FindallSalary').then(function (res) {
 
 					//把从json获取的数据赋值给数
-					var data = res.data
+					var data = res.data.lists
 					that.SalaryList = data
 					console.log("SalaryList--->"+that.SalaryList)
 

@@ -16,6 +16,11 @@ public class Salary {
         this.finasalary = finasalary;
         this.payday = payday;
     }
+    public Salary(int job_id, BigDecimal finasalary) {
+        this.job_id = job_id;
+        this.finasalary = finasalary;
+
+    }
     public Salary() {
 
     }
