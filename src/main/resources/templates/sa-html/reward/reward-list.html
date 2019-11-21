@@ -440,13 +440,29 @@
 							aleave:that.temp.aleave,
 							absenteeism:that.temp.absenteeism,
 						},
-						success:function(){
-							layer.alert('添加成功', {
+						success:function(data){
+							if (data ==1) {
+								layer.alert('添加成功', {
+									skin: 'layui-layer-molv'
+									,closeBtn: 0
+									,anim: 4
+								});
+								that.getData()
+							}
+							else{
+								layer.alert('此工号不存在', {
+									skin: 'layui-layer-molv'
+									,closeBtn: 0
+									,anim: 4
+								});
+							}
+						},
+						error: function(){
+							layer.alert('添加失败', {
 								skin: 'layui-layer-molv'
 								,closeBtn: 0
 								,anim: 4
 							});
-							that.getData()
 						}
 					})
 					that.addVisible = false

@@ -92,7 +92,6 @@ public class AttendanceController {
         aleave.setExamine(examine);
         int flag=attendanceservice.Insertaleave(aleave);
         return flag;
-
     }
 
     @RequestMapping(value = "/AleaveFuzzyreward", method = RequestMethod.POST)

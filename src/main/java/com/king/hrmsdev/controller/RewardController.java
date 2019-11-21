@@ -105,7 +105,6 @@ public class RewardController {
         System.out.println("reward:" + reward);
 
         int flag = rewardservice.Insertreward(reward);
-        System.out.println("flag:546546546546546546546546546546456:                 " + flag);
         return flag;
 
     }

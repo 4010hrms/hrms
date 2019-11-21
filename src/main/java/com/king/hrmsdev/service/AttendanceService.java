@@ -73,6 +73,7 @@ public class AttendanceService {
             flag=0;
         }
         finally {
+            System.out.println("service-------------------->"+flag);
             return flag;
         }
 

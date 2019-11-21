@@ -512,6 +512,9 @@
 					console.log("that.temp.state---->"+ that.temp.state)
 
 					$.ajax({
+						async : false,
+						cache : false,
+						dataType:"json",
 						url: "http://localhost:9900/Insertecheck",
 						type: "post",
 						data:{
@@ -521,14 +524,31 @@
 							closetime:that.temp.closetime,
 							state:that.temp.state,
 						},
-						success:function(){
-							layer.alert('添加成功', {
+						success:function(data){
+							if (data ==1) {
+								layer.alert('添加成功', {
+									skin: 'layui-layer-molv'
+									,closeBtn: 0
+									,anim: 4
+								});
+								that.getData()
+							}
+							else{
+								layer.alert('此工号不存在', {
+									skin: 'layui-layer-molv'
+									,closeBtn: 0
+									,anim: 4
+								});
+							}
+						},
+						error: function(){
+							layer.alert('添加失败', {
 								skin: 'layui-layer-molv'
 								,closeBtn: 0
 								,anim: 4
 							});
-							that.getData()
 						}
+
 					})
 					that.addVisible = false
 				}
