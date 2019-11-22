@@ -37,8 +37,17 @@ public class SlaryMapperService {
         List<SalaryList> lists=slaryMapper.QuaryAllSalary();
         for (SalaryList salaryList:lists){
             Integer integer=salaryList.getJob_id();
+            String department=slaryMapper.QuaryDepartmentByJobID(integer);
             salaryList.setCheckMoney(BigDecimal.valueOf(check_moeny(integer)));
+            salaryList.setDepartment(department);
+            if(salaryList.getSex().equals("1")){
+                salaryList.setSex("男");
+
+            }else
+            {    salaryList.setSex("女");
+            }
         }
+
         return  lists;
     }
     public  void updateSalary(Salary salary){
@@ -51,6 +60,7 @@ public class SlaryMapperService {
                 if (salaryLists.get(i) != null) {
                     String sex;
                     int id = salaryLists.get(i).getJob_id();
+
                     String ename = salaryLists.get(i).getEname();
                     if(salaryLists.get(i).getSex().equals("1")){
                        sex="男";
@@ -58,7 +68,7 @@ public class SlaryMapperService {
                     }else
                     {   sex="女";
                     }
-                    String department = salaryLists.get(i).getDepartment();//部门
+                    String department = slaryMapper.QuaryDepartmentByJobID(id);//部门
                     String position = salaryLists.get(i).getPosition();//职位
                     BigDecimal baseMoney = salaryLists.get(i).getBaseMoney();//基本工资
                     BigDecimal finalMoney = salaryLists.get(i).getFinalMoney();//最终薪资

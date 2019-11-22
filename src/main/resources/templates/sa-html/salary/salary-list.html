@@ -60,24 +60,24 @@
 		<div class="c-title">部门列表</div>
 		<el-table class="data-table" :data="SalaryList" size="mini"  style="width: 100%">
 
-			<el-table-column label="工号"   prop="job_id" width="70px" > </el-table-column>
-			<el-table-column label="姓名" prop="ename" width="200px">
+			<el-table-column label="工号"   prop="job_id" width="70px"  sortable> </el-table-column>
+			<el-table-column label="姓名" prop="ename" width="200px" sortable>
 				<template slot-scope="scope">
 					<b>{{scope.row.ename}}</b>
 				</template>
 			</el-table-column>
-			<el-table-column label="性别" prop="sex"> </el-table-column>
-			<el-table-column label="所属部门" prop="department" width="70px">
+			<el-table-column label="性别" prop="sex" sortable> </el-table-column>
+			<el-table-column label="所属部门" prop="department" width="100px" sortable>
 				<template slot-scope="scope">
 					<b>{{scope.row.department}}</b>
 				</template>
 			</el-table-column>
 
-			<el-table-column label="职位" prop="position"></el-table-column>
+			<el-table-column label="职位" prop="position" sortable></el-table-column>
 
-			<el-table-column label="基础工资" prop="baseMoney"></el-table-column>
-			<el-table-column label="考勤奖金" prop="checkMoney"></el-table-column>
-			<el-table-column label="最终薪资" prop="finalMoney"></el-table-column>
+			<el-table-column label="基础工资" prop="baseMoney" sortable></el-table-column>
+			<el-table-column label="考勤奖金" prop="checkMoney" sortable></el-table-column>
+			<el-table-column label="最终薪资" prop="finalMoney" sortable></el-table-column>
 
 			<el-table-column prop="address" label="操作" width="">
 				<template slot-scope="scope">

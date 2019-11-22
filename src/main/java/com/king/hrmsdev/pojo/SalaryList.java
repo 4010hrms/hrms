@@ -19,6 +19,20 @@ public class SalaryList {
     public SalaryList() {
     }
 
+    public SalaryList(int job_id, String ename, String sex, String department, String position, BigDecimal baseMoney) {
+        this.job_id = job_id;
+        this.ename = ename;
+        this.sex = sex;
+        this.department = department;
+        this.position = position;
+        this.baseMoney = baseMoney;
+    }
+
+    public SalaryList(int job_id, BigDecimal finalMoney) {
+        this.job_id = job_id;
+        this.finalMoney = finalMoney;
+    }
+
     public SalaryList(int job_id, String ename, String sex, String department, String position, BigDecimal baseMoney, BigDecimal finalMoney) {
         this.job_id = job_id;
         this.ename = ename;

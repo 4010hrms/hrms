@@ -29,32 +29,32 @@
     <select id="QuaryIdByName"  parameterType="String" resultType="int[]">
                 select job_id from employees where ename like CONCAT('%',#{ename},'%')
   </select>
+
     <select id="QuaryAllSalary"   resultMap="resultMap">
-        select employees.job_id,employees.ename,employees.sex,department.department,position.position_name,position.salary,salary.finasalary from
-        employees,department,position,salary
-            <where>
-                 employees.job_id=department.department_id
-                 and  employees.position_id=position.position_id
-                 and  employees.job_id=salary.job_id
-          </where>
-  </select>
+    select e.job_id,e.ename,e.sex,d.department,p.position_name,p.salary,s.finasalary from
+   salary s
+	    left join employees e on s.job_id=e.job_id
+        left join   department d on e.department_id=d.department_id
+        left join  position  p on e.position_id=p.position_id
+</select>
     <select id="QuarySalary"  parameterType="com.king.hrmsdev.entity.Employees" resultMap="resultMap">
-        select employees.job_id,employees.ename,employees.sex,department.department,position.position_name,position.salary,salary.finasalary from
-        employees,department,position,salary
-         <where>
-             employees.job_id=department.department_id
-             and  employees.position_id=position.position_id
-             and  employees.job_id=salary.job_id
-             <if test="job_id != null and job_id != 0">
-               and employees.job_id  = #{job_id}
+        select e.job_id,e.ename,e.sex,d.department,p.position_name,p.salary,s.finasalary from
+        salary s
+        left join employees e on s.job_id=e.job_id
+        left join department d on d.department_id=e.job_id
+        left join position p on p.position_id=e.position_id
+        <where>
+            <if test="job_id != null and job_id != 0">
+            and e.job_id  = #{job_id}
              </if>
-             <if test="ename!=null ">
-                 AND employees.ename LIKE CONCAT('%',#{ename},'%')
-             </if>
-             <if test="time!=null ">
-                 AND salary.payday LIKE CONCAT('%',#{time},'%')
-             </if>
-    </where>
+           <if test="ename!=null ">
+            AND e.ename LIKE CONCAT('%',#{ename},'%')
+           </if>
+         <if test="time!=null ">
+            AND s.payday LIKE CONCAT(#{time},'%')
+         </if>
+        </where>
+
   </select>
     <insert id="AddSalary" parameterType="com.king.hrmsdev.entity.Salary"  >
         insert into salary values (null,#{job_id},#{finasalary},#{payday});
@@ -75,4 +75,5 @@
         <result column="salary" property="baseMoney" />
         <result column="finasalary" property="finalMoney" />
     </resultMap>
+
 </mapper>
